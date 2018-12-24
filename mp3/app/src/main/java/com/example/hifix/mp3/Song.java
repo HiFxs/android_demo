@@ -1,5 +1,7 @@
 package com.example.hifix.mp3;
 
+import android.graphics.Bitmap;
+
 public class Song {
     /**
      * 歌手
@@ -21,4 +23,8 @@ public class Song {
      * 歌曲的大小
      */
     public long size;
+    /**
+     * 歌曲封面
+     */
+    public Bitmap image;
 }

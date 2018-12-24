@@ -24,10 +24,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener ,AdapterView.OnItemClickListener{
     private long firstime = 0;
-private LinearLayout linearLayout;
-private Button scan_button;
+    private LinearLayout linearLayout;
+    private Button scan_button;
     public static final int update_list = 1;
-    public static String text="";
+    public static String text="",singer="";
     private MyAdapter adapter;
     public  static  String path="";
     private ListView music_listView;
@@ -44,10 +44,6 @@ private Button scan_button;
         }
     };
     private List<Song> list;
-    private String[] data={
-            "a.mp3","b.mp3","c.mpp3","c.mpp3","c.mpp3","c.mpp3","c.mpp3","c.mpp3","c.mpp3","c.mpp3","c.mpp3","c.mpp3"
-            ,"c.mpp3","c.mpp3","c.mpp3","c.mpp3","/data/test.mp3"
-    };
     private List<String> DATA;
     public MainActivity() {
     }
@@ -92,11 +88,15 @@ protected  void music_list(){
 }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-text=(String)adapter.getItem(position).song;
-path=(String)adapter.getItem(position).path;
+      text=(String)adapter.getItem(position).song;
+      path=(String)adapter.getItem(position).path;
+      singer=(String)adapter.getItem(position).singer;
+        //MusicService.views.setTextViewText(R.id.tv_name, text);
+        //MusicService.views.setTextViewText(R.id.tv_author,(String)adapter.getItem(position).singer );
         Intent intent=new Intent(MainActivity.this,music.class);
         startActivity(intent);
-//et_path.setText(text);
+
+      //et_path.setText(text);
 
         //大多数情况下，position和id相同，并且都从0开始
       //  Toast.makeText(this, "listview的"+text+"被点击了！，点击的位置是-->" + position,Toast.LENGTH_SHORT).show();
@@ -118,6 +118,7 @@ path=(String)adapter.getItem(position).path;
         music_listView.setOnItemClickListener(this);
     }
 
+    //运行时权限处理
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode){
