@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--绝对布局文件-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#ffffff"
     android:orientation="horizontal"
     android:padding="10dp">
-
+<!--前台服务的标题图片-->
     <ImageView
         android:id="@+id/image"
         android:layout_width="55dp"
@@ -13,7 +14,7 @@
         android:layout_centerVertical="true"
         android:contentDescription="@null"
         android:src="@mipmap/music" />
-
+<!--布局方式线性布局-->
     <LinearLayout
         android:id="@+id/layout_desc"
         android:layout_width="105dp"
@@ -49,7 +50,7 @@
         android:layout_toEndOf="@id/layout_desc"
         android:layout_toRightOf="@id/layout_desc"
         android:orientation="horizontal">
-
+<!--文本框-->
         <TextView
             android:id="@+id/tv_pause"
             android:layout_width="wrap_content"

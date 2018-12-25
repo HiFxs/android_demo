@@ -49,27 +49,34 @@ public class MusicService extends Service {
         }
     }
 
+    //1.设置前台服务通知
     @Override
     public void onCreate() {
         // 设置点击通知结果
+        //意图
         Intent intent = new Intent(this, MainActivity.class);
+        //预处理意图
         PendingIntent contentPendingIntent = PendingIntent.getActivity(this, CONTENT_PENDINGINTENT_REQUESTCODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent delIntent = new Intent(this, MusicService.class);
         PendingIntent delPendingIntent = PendingIntent.getService(this, DELETE_PENDINGINTENT_REQUESTCODE, delIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-// 自定义布局
-                views = new RemoteViews(getPackageName(), R.layout.layout_mediaplayer);
+// 自定义布局、动态加载布局
+
+        views = new RemoteViews(getPackageName(), R.layout.layout_mediaplayer);
 
         MusicService.views.setTextViewText(R.id.tv_name,MainActivity.text);
         MusicService.views.setTextViewText(R.id.tv_author, MainActivity.singer);
         // 暂停/播放
         Intent intentPlay = new Intent("playMusic");
         PendingIntent playPendingIntent = PendingIntent.getBroadcast(this, PLAY_PENDINGINTENT_REQUESTCODE, intentPlay, PendingIntent.FLAG_CANCEL_CURRENT);
+       //绑定相应事件
         views.setOnClickPendingIntent(R.id.tv_pause, playPendingIntent);
 
         // 停止
         Intent intentStop = new Intent("stopMusic");
+        //获取广播
         PendingIntent stopPendingIntent = PendingIntent.getBroadcast(this, STOP_PENDINGINTENT_REQUESTCODE, intentStop, PendingIntent.FLAG_CANCEL_CURRENT);
+
         views.setOnClickPendingIntent(R.id.tv_cancel, stopPendingIntent);
 
         builder = new NotificationCompat.Builder(this)
@@ -94,7 +101,7 @@ public class MusicService extends Service {
 //        notificationManager.notify(NOTIFICATION_PENDINGINTENT_ID, builder.build());
 
         startForeground(NOTIFICATION_PENDINGINTENT_ID, builder.build());
-        // 注册广播
+        // 2.注册广播
         playerReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -104,11 +111,13 @@ public class MusicService extends Service {
                         if (mediaPlayer != null) {
                             if (!isPause) {
                                 mediaPlayer.pause();
+                                //用于控制暂停和播放的监控
                                 isPause = true;
                                 tag=false;
                                 music.musicStatus.setText("暂停~~");
                                 music.btn_playorpause.setText("播放");
-                                music.animator.pause();
+                                music.animator.pause();//暂停动画
+                                //更新通知栏
                                 updateNotification();
                             } else {
                                 mediaPlayer.start();
@@ -116,7 +125,7 @@ public class MusicService extends Service {
                                 tag=true;
                                 music.musicStatus.setText("播放~~");
                                 music.btn_playorpause.setText("暂停");
-                                music.animator.resume();
+                                music.animator.resume();//恢复动画
                                 updateNotification();
                             }
                         }
@@ -127,8 +136,9 @@ public class MusicService extends Service {
                 }
             }
         };
+
+        //意图过滤器
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("nextMusic");
         intentFilter.addAction("playMusic");
         intentFilter.addAction("stopMusic");
         registerReceiver(playerReceiver, intentFilter);
@@ -179,6 +189,7 @@ public class MusicService extends Service {
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(MainActivity.path);
                 mediaPlayer.prepare();
+
                 mediaPlayer.seekTo(0);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -191,7 +202,7 @@ public class MusicService extends Service {
         // 停止服务
         stopSelf();
     }
-    // 更新Notification
+    // 3.更新Notification
     private void updateNotification() {
         if (views != null) {
 

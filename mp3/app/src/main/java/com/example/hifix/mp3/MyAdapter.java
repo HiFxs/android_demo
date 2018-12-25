@@ -9,14 +9,16 @@ import android.widget.TextView;
 import java.util.List;
 
 public class MyAdapter extends BaseAdapter {
-    private Context context;
+
+    private Context context;//上下文
     private List<Song> list;
+
     public MyAdapter(MainActivity mainActivity, List<Song> list) {
         this.context = mainActivity;
         this.list = list;
 
     }
-
+//重载
     @Override
     public int getCount() {
         return list.size();
